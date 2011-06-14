@@ -14,15 +14,22 @@ typedef map<string, double> duration_map_t;
 int main() {
     duration_map_t durations;
     struct timespec start, end, delta;
-    const int BIG = 200000000;
+    const int BIG = 500000000;
     vector <int> v;
     for ( int i = 0; i < BIG; i++ ) {
         v.push_back( i );
     }
 
+    /* Run once to prime cache before taking timings. */
     int n = 0;
-    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
     for(vector<int>::iterator it = v.begin(); it != v.end(); ++it) {
+        n += *it;
+    }
+
+    n = 0;
+    clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &start);
+    vector<int>::iterator iend = v.end();
+    for(vector<int>::iterator it = v.begin(); it != iend; ++it) {
         n += *it;
     }
     clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &end);
